@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, StyleSheet, Text, View, Dimensions, ScrollView} from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, View, Dimensions, ScrollView, ActivityIndicator} from 'react-native';
 import { Component } from 'react';
 import Comment from './Comment';
 import { HeaderBackButton } from '@react-navigation/elements';
@@ -12,7 +12,7 @@ export default class ItemPage extends Component{
   constructor(props) {
     super(props);
     this.state = {
-        comments: []
+        comments: [],
     }
     this.comments(this.props.route.params.image.id, this.props.route.params.image.is_album)
     
@@ -35,7 +35,8 @@ export default class ItemPage extends Component{
     .then(response => response.json())
       .then((data) => {
           this.setState({
-              comments:data.data
+              comments:data.data,
+
           });
              
       })
@@ -79,6 +80,7 @@ export default class ItemPage extends Component{
         <Text>{this.props.route.params.image.account_url}</Text>
         </View>
         <Image defaultSource={require('../assets/empty.webp')} style={styles.image} source={{uri: this.props.route.params.url}}/>
+        {this.state.comments.length == 0 && <ActivityIndicator style={styles.container} size="large" />}
         {this.state.comments.map((comment) => {
         return (
           <View>
